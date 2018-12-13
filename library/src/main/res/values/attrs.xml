@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017.
+  ~ author:kuan
+  ~ SunStar
+  ~
+  -->
+
+<resources>
+
+    <declare-styleable name="KRuleLayout">
+        <attr name="rule" format="enum">
+            <enum name="left" value="1"></enum>
+            <enum name="right" value="2"></enum>
+            <enum name="bottom" value="3"></enum>
+        </attr>
+        <attr name="android:layout_gravity"/>
+        <attr name="direction" >
+            <enum name="left" value="0"/>
+            <enum name="right" value="1"/>
+        </attr>
+        <attr name="android:layout_weight" />
+        <attr name="ignoreHeight" format="dimension|reference"></attr>
+    </declare-styleable>
+
+
+</resources>
