@@ -13,10 +13,10 @@ Android提供的几种布局方式能满足绝大部分的需求，但是有些�
 ![image](https://github.com/cugkuan/KRuleLayout/blob/master/pic/3.jpeg)
 
 
- 这三个 item 都是问题；每一个问题有问题标题，问题描述，问题图片，问题的答案数，标签，还有“回答”这个操作按钮。
-对于一个问题，问题的描述可能有，可能没有，问题的问题的图片也可能有，也可能没有；问题的标题有些很长，有些很短。
+ 这三个 item 都是问题；每一个问题有标题，描述，图片，答案数，标签，还有“回答”这个操作按钮。
+对于一个问题，描述可能有，可能没有；图片可能有，也可能没有；标题有些很长，有些很短。
 
-注意上面三个item的表现，左半部分显示标题，右半部分显示图片，而问题描述等其它元素，根据标题，的宽度而动态的进行布局的。
+注意上面三个item的表现，左半部分显示标题，右半部分显示图片，而其它元素，根据标题，图片的宽度而动态的进行布局。
 
 **那这种布局如何实现？**
 显然依靠Android系统提供的布局方式，将无法满足这个需求。需要自己去写布局，而KRulayout布局就是解决这样问题的。如果你碰到这样的需求，可以直接使用KRuleLayout而不必再去重复发明轮子。
@@ -41,4 +41,4 @@ KRuleLayout，将View分为三类，分别是标记为left,right和没有标记�
 | rule | left,right,bottom | 指定子元素的位置。其中当View没有指定位置的时候，默认为是bottom。 |
 | direction | left,right | KRuleLayout的布局方向，见示例|
 |ignoreHeight|dimension|有些情况下，即使是left或者right还有空间，但是我们希望其他的view 不必在left或者righ下面布局。ignoreHeight  = 20dp ,意思是，即使left或者right的空间剩下的不足20dp,那么其他元素就单独的一行，不需要在left或者right下面了。|
-|android:layout_weigh|float|eft和Right的宽度会根据这个权重进行动态的就算分配|
+|android:layout_weigh|float|left和Right的宽度会根据这个权重进行动态的就算分配|
