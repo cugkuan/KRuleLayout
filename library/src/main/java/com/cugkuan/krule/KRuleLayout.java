@@ -3,13 +3,12 @@ package com.cugkuan.krule;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -107,9 +106,11 @@ public class KRuleLayout extends ViewGroup {
 
         mBottomViews.clear();
         mFollowView.clear();
+        mLeftView = null;
+        mRightView = null;
         int leftHeight = 0;
         int rightHeight = 0;
-        sortChildView();
+        prepareChildView();
         if (mLeftView == null || mRightView == null) {
             allBottomMeasure(widthMeasureSpec, heightMeasureSpec);
         } else {
@@ -137,19 +138,22 @@ public class KRuleLayout extends ViewGroup {
             leftHeight = mLeftView.getMeasuredHeight() + paramsLeft.topMargin + paramsLeft.bottomMargin;
             rightHeight = mRightView.getMeasuredHeight() + paramsRight.topMargin + paramsRight.bottomMargin;
             if (mDirection == DIRECTION_LEFT) {
+
                 leftHeight = leftHeight + ignoreHeight;
                 Iterator<View> iterator = mBottomViews.iterator();
 
                 while (iterator.hasNext()) {
+                    View view = iterator.next();
+                    LayoutParams params = (LayoutParams) view.getLayoutParams();
+
+                    leftHeight = leftHeight + params.topMargin;
+
                     if (leftHeight >= rightHeight) {
                         break;
                     } else {
-                        View view = iterator.next();
-                        LayoutParams params = (LayoutParams) view.getLayoutParams();
-
                         int childHeightSpec = getChildMeasureSpec(heightMeasureSpec, 0, params.height);
                         int ableUserWidthSpece = MeasureSpec.makeMeasureSpec(leftUsedWidth - params.leftMargin - params.rightMargin,
-                                MeasureSpec.AT_MOST);
+                                MeasureSpec.EXACTLY);
                         int chileWidthSpec = getChildMeasureSpec(ableUserWidthSpece,params.leftMargin +params.rightMargin,
                                 params.width);
                         view.measure(chileWidthSpec, childHeightSpec);
@@ -157,7 +161,7 @@ public class KRuleLayout extends ViewGroup {
                             break;
                         }
 
-                        leftHeight = leftHeight + view.getMeasuredHeight() + params.topMargin + params.bottomMargin;
+                        leftHeight = leftHeight + view.getMeasuredHeight() + params.bottomMargin;
                         mFollowView.add(view);
                         iterator.remove();
                     }
@@ -168,24 +172,22 @@ public class KRuleLayout extends ViewGroup {
                 rightHeight = rightHeight + ignoreHeight;
                 Iterator<View> iterator = mBottomViews.iterator();
                 while (iterator.hasNext()) {
+                    View view = iterator.next();
+                    LayoutParams params = (LayoutParams) view.getLayoutParams();
+                    rightHeight = rightHeight + params.topMargin;
                     if (rightHeight >= leftHeight) {
                         break;
                     } else {
-                        View view = iterator.next();
-                        LayoutParams params = (LayoutParams) view.getLayoutParams();
                         int childHeightSpec = getChildMeasureSpec(heightMeasureSpec, 0, params.height);
-
                         int ableUserWidthSpece = MeasureSpec.makeMeasureSpec(rightUsedWidth - params.leftMargin - params.rightMargin,
-                                MeasureSpec.AT_MOST);
+                                MeasureSpec.EXACTLY);
                         int chileWidthSpec = getChildMeasureSpec(ableUserWidthSpece,params.leftMargin +params.rightMargin,
                                 params.width);
-
                         view.measure(chileWidthSpec, childHeightSpec);
-
                         if (view.getMeasuredWidth() + params.leftMargin + params.rightMargin > rightUsedWidth){
                             break;
                         }
-                        rightHeight = rightHeight + view.getMeasuredHeight() + params.topMargin + params.bottomMargin;
+                        rightHeight = rightHeight + view.getMeasuredHeight() + params.bottomMargin;
                         mFollowView.add(view);
                         iterator.remove();
                     }
@@ -501,89 +503,47 @@ public class KRuleLayout extends ViewGroup {
 
 
     /**
-     * 对view 进行从左到右边，然后到下进行排序,并进行赋值
-     *
-     * @return
+     *整理
      */
-    private void sortChildView() {
+    private void prepareChildView() {
         final int count = getChildCount();
-
         for (int i = 0; i < count; i++) {
             View view = getChildAt(i);
             if (view.getVisibility() != GONE) {
-                mBottomViews.add(getChildAt(i));
-            }
-        }
-        Collections.sort(mBottomViews, new Comparator<View>() {
-            @Override
-            public int compare(View o1, View o2) {
-                KRuleLayout.LayoutParams params1 = (KRuleLayout.LayoutParams) o1.getLayoutParams();
-                KRuleLayout.LayoutParams params2 = (KRuleLayout.LayoutParams) o2.getLayoutParams();
-                return params1.rule - params2.rule;
-            }
-        });
-        mLeftView = getPointView(mBottomViews, RULE_LEFT);
-        mRightView = getPointView(mBottomViews, RULE_RIGHT);
-
-//        if (mLeftView == null && mBottomViews.size() > 0) {
-//            mLeftView = getDefaultView(mBottomViews);
-//        }
-//        if (mRightView == null && mBottomViews.size() > 0) {
-//            mRightView = getDefaultView(mBottomViews);
-//        }
-    }
-
-    /**
-     * 当没有指定排列规则后，然后排序的顺序进行指定
-     *
-     * @param views
-     * @return
-     */
-    private View getDefaultView(List<View> views) {
-
-        Iterator<View> iterator = views.iterator();
-        while (iterator.hasNext()) {
-            View view = iterator.next();
-            LayoutParams params = (LayoutParams) view.getLayoutParams();
-            if (params.rule == -1) {
-                iterator.remove();
-                return view;
-            }
-        }
-        return null;
-
-    }
-
-
-    private View getPointView(List<View> views, int rule) {
-
-        if (views == null || views.isEmpty()) {
-            return null;
-        }
-        Iterator<View> iterator = views.iterator();
-        View goal = null;
-        while (iterator.hasNext()) {
-            View view = iterator.next();
-            LayoutParams params = (LayoutParams) view.getLayoutParams();
-            if (params.rule == rule) {
-                if (goal == null) {
-                    goal = view;
+                LayoutParams params = (LayoutParams) view.getLayoutParams();
+                if (params.rule == LayoutParams.RULE_LEFT){
+                    if (mLeftView == null){
+                        mLeftView = view;
+                    }else {
+                        mBottomViews.add(view);
+                    }
+                }else if (params.rule == LayoutParams.RULE_RIGHT){
+                    if (mRightView == null){
+                        mRightView = view;
+                    }else {
+                        mBottomViews.add(view);
+                    }
+                }else {
+                    mBottomViews.add(view);
                 }
-                iterator.remove();
             }
         }
-        return goal;
     }
-
 
     public static class LayoutParams extends MarginLayoutParams {
 
 
+        public static final int RULE_LEFT = 1;
+
+        public static final int RULE_RIGHT = 2;
+
+        public static final int RULE_BOTTOM = 3;
+
         /**
-         * 规则 left ;right ;bottom
+         * 规则 left = 1 ;right = 2；其余的 都是3
          * 如果没有指定，那么系统会进行默认的处理
          */
-        public int rule = -1;
+        public int rule = RULE_BOTTOM;
         /**
          * Value for {@link #gravity} indicating that a gravity has not been
          * explicitly specified.
@@ -610,7 +570,7 @@ public class KRuleLayout extends ViewGroup {
             super(c, attrs);
             TypedArray array = c.obtainStyledAttributes(attrs, R.styleable.KRuleLayout);
             if (array.hasValue(R.styleable.KRuleLayout_rule)) {
-                rule = array.getInt(R.styleable.KRuleLayout_rule, -1);
+                rule = array.getInt(R.styleable.KRuleLayout_rule, RULE_BOTTOM);
             }
             if (array.hasValue(R.styleable.KRuleLayout_android_layout_gravity)) {
                 gravity = array.getInt(R.styleable.KRuleLayout_android_layout_gravity, UNSPECIFIED_GRAVITY);

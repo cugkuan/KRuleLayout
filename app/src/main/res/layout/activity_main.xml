@@ -134,10 +134,11 @@
             android:background="@android:color/holo_orange_light"
             android:layout_height="wrap_content"/>
         <TextView
-            android:layout_width="270dp"
+            android:layout_width="match_parent"
             android:text="2"
             android:textStyle="bold"
             android:gravity="center"
+            android:layout_marginTop="30dp"
             android:textSize="18sp"
             android:textColor="@android:color/white"
             android:background="@android:color/holo_blue_bright"

@@ -39,7 +39,7 @@ KRuleLayout，将View分为三类，分别是标记为left,right和没有标记�
 
    属性 | 取值 | 备注 |
 | ------ | ------ | ------ |
-| rule | left,right,bottom | 指定子元素的位置。其中当View没有指定位置的时候，默认为是bottom。 |
+| rule | left,right | 指定子元素的位置 |
 | direction | left,right | KRuleLayout的布局方向，见示例|
 |ignoreHeight|dimension|有些情况下，即使是left或者right还有空间，但是我们希望其他的view 不必在left或者righ下面布局。ignoreHeight  = 20dp ,意思是，即使left或者right的空间剩下的不足20dp,那么其他元素就单独的一行，不需要在left或者right下面了。|
 |android:layout_weigh|float|left和Right的宽度会根据这个权重进行动态的就算分配|
