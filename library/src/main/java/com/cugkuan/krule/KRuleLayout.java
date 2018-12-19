@@ -24,10 +24,6 @@ import java.util.List;
 public class KRuleLayout extends ViewGroup {
 
 
-    public static final int RULE_LEFT = 1;
-    public static final int RULE_RIGHT = 2;
-    public static final int RULE_BOTTOM = 3;
-
     /**
      * 以左边的为基准
      */
