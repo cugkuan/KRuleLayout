@@ -12,6 +12,7 @@
     <com.cugkuan.krule.KRuleLayout
         app:direction="left"
         android:layout_width="match_parent"
+        android:background="#45000000"
         android:layout_height="wrap_content">
         <android.support.v7.widget.AppCompatTextView
             android:background="@android:color/holo_red_dark"
@@ -56,6 +57,7 @@
 
     <com.cugkuan.krule.KRuleLayout
         app:direction="left"
+        android:background="#45000000"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

@@ -141,10 +141,9 @@ public class KRuleLayout extends ViewGroup {
                 while (iterator.hasNext()) {
                     View view = iterator.next();
                     LayoutParams params = (LayoutParams) view.getLayoutParams();
-
                     leftHeight = leftHeight + params.topMargin;
-
                     if (leftHeight >= rightHeight) {
+                        leftHeight = leftHeight - params.topMargin;
                         break;
                     } else {
                         int childHeightSpec = getChildMeasureSpec(heightMeasureSpec, 0, params.height);
@@ -172,6 +171,7 @@ public class KRuleLayout extends ViewGroup {
                     LayoutParams params = (LayoutParams) view.getLayoutParams();
                     rightHeight = rightHeight + params.topMargin;
                     if (rightHeight >= leftHeight) {
+                        rightHeight = rightHeight - params.topMargin;
                         break;
                     } else {
                         int childHeightSpec = getChildMeasureSpec(heightMeasureSpec, 0, params.height);
@@ -329,11 +329,9 @@ public class KRuleLayout extends ViewGroup {
             mBottomViews = new ArrayList<>();
         }
         if (mLeftView != null) {
-            LayoutParams params = (LayoutParams) mLeftView.getLayoutParams();
             mBottomViews.add(0, mLeftView);
         }
         if (mRightView != null) {
-            LayoutParams params = (LayoutParams) mRightView.getLayoutParams();
             mBottomViews.add(0, mRightView);
         }
         int mTotalHeight = 0;
